@@ -1,72 +1,213 @@
 <!-- ===== index.html ===== -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MHKZON POS</title>
     <link rel="stylesheet" href="styles.css" />
+    <script src="translations.js"></script>
   </head>
   <body>
     <!-- ─── Top-bar ─────────────────────────────────────────────── -->
     <header class="topbar">
       <img src="logo.png" alt="MHKZON Logo" class="logo" />
+      <div class="language-selector">
+        <button class="lang-btn active" data-lang="en">English</button>
+        <button class="lang-btn" data-lang="ar">العربية</button>
+        <button class="lang-btn" data-lang="ur">اردو</button>
+      </div>
+      <div class="nav-buttons">
+        <button id="posPageBtn" class="nav-btn active">POS</button>
+        <button id="stockManagementBtn" class="nav-btn" data-translate="stockManagementNav">Manage Stock</button>
+      </div>
       <div class="actions">
-        <input id="search" placeholder="Search products..." />
+        <input id="search" placeholder="Search products..." data-translate="searchPlaceholder" />
         <button id="searchBtn" aria-label="search">🔍</button>
         <button id="addProductBtn" class="accent-btn" aria-label="add product">
-          ➕ Add Product
+          ➕ <span data-translate="addProduct">Add Product</span>
         </button>
       </div>
     </header>
 
     <!-- ─── Categories nav ─────────────────────────────────────── -->
     <nav class="categories" id="categoryNav">
-      <button class="category active" data-cat="all">All</button>
-      <button class="category" data-cat="flour">Flour</button>
-      <button class="category" data-cat="pulses">Pulses</button>
-      <button class="category" data-cat="dry">Fruits</button>
-      <button class="category" data-cat="oils">Oil</button>
+      <button class="category active" data-cat="all" data-translate="all">All</button>
+      <button class="category" data-cat="flour" data-translate="flour">Flour</button>
+      <button class="category" data-cat="pulses" data-translate="pulses">Pulses</button>
+      <button class="category" data-cat="dry" data-translate="fruits">Fruits</button>
+      <button class="category" data-cat="oils" data-translate="oil">Oil</button>
     </nav>
 
     <!-- ─── Main layout ────────────────────────────────────────── -->
-    <main class="layout">
-      <section class="products" id="product-grid"></section>
+    <!-- POS Page -->
+    <div id="pos-page">
+      <main class="layout">
+        <section class="products" id="product-grid"></section>
 
-      <aside class="cart">
-        <h2>Cart</h2>
-        <ul id="cart-items"></ul>
-        <div class="summary">
-          <p id="item-count">Total Items: 0</p>
-          <p id="qty-count">Total Quantity: 0</p>
-          <button id="checkoutBtn">
-            Checkout <span id="total-price">0.00 ﷼</span>
-          </button>
+        <aside class="cart">
+          <h2 data-translate="cart">Cart</h2>
+          <ul id="cart-items"></ul>
+          <div class="summary">
+            <p id="item-count"><span data-translate="totalItems">Total Items</span>: 0</p>
+            <p id="qty-count"><span data-translate="totalQuantity">Total Quantity</span>: 0</p>
+            <button id="checkoutBtn">
+              <span data-translate="checkout">Checkout</span> <span id="total-price">0.00 ﷼</span>
+            </button>
+          </div>
+        </aside>
+      </main>
+    </div>
+    
+    <!-- Stock Management Page -->
+    <div id="stock-page" class="hidden">
+      <main class="stock-container">
+        <div class="stock-header">
+          <h1 data-translate="stockManagement">Stock Management</h1>
+          <div class="stock-actions">
+            <div class="search-filter">
+              <input id="stockSearch" type="text" data-translate="searchPlaceholder" placeholder="Search products..." />
+              <select id="stockFilter">
+                <option value="all" data-translate="all">All</option>
+                <option value="lowStock" data-translate="lowStock">Low Stock</option>
+                <option value="outOfStock" data-translate="outOfStock">Out of Stock</option>
+                <option value="inStock" data-translate="inStock">In Stock</option>
+              </select>
+              <button id="applyFilterBtn" class="accent-btn" data-translate="filter">Filter</button>
+            </div>
+          </div>
         </div>
-      </aside>
-    </main>
+        
+        <!-- Notifications Section -->
+        <div class="notifications-section">
+          <h2 data-translate="notifications">📢 Stock Notifications</h2>
+          <div id="stockNotifications" class="notifications-container">
+            <!-- Notifications will be inserted here by JavaScript -->
+          </div>
+        </div>
+        
+        <!-- Products Status Table -->
+        <div class="products-status-section">
+          <h2 data-translate="productsStatus">📦 Products Status Overview</h2>
+          <div class="table-controls">
+            <input type="text" id="productsStatusSearch" placeholder="Search products..." class="search-input">
+            <select id="statusFilter" class="filter-select">
+              <option value="all">All Products</option>
+              <option value="inStock">In Stock</option>
+              <option value="lowStock">Low Stock</option>
+              <option value="outOfStock">Out of Stock</option>
+            </select>
+          </div>
+          <table class="products-status-table">
+            <thead>
+              <tr>
+                <th data-translate="productID">ID</th>
+                <th data-translate="productImage">Image</th>
+                <th data-translate="productName">Product Name</th>
+                <th data-translate="category">Category</th>
+                <th data-translate="price">Price</th>
+                <th data-translate="currentStock">Stock</th>
+                <th data-translate="status">Status</th>
+                <th data-translate="lastUpdated">Last Updated</th>
+                <th data-translate="actions">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="productsStatusTableBody">
+              <!-- Products status will be inserted here by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="stock-content">
+          <h2 data-translate="stockManagement">🔧 Stock Management</h2>
+          <table class="stock-table">
+            <thead>
+              <tr>
+                <th data-translate="productID">ID</th>
+                <th data-translate="productImage">Image</th>
+                <th data-translate="productName">Product Name</th>
+                <th data-translate="currentStock">Current Stock</th>
+                <th data-translate="lowStockAlert">Low Stock Alert</th>
+                <th data-translate="updateStock">Update Stock</th>
+              </tr>
+            </thead>
+            <tbody id="stockTableBody">
+              <!-- Stock items will be inserted here by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="stock-history-section">
+          <h2 data-translate="stockHistory">Stock History</h2>
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th data-translate="date">Date</th>
+                <th data-translate="productName">Product Name</th>
+                <th data-translate="action">Action</th>
+                <th data-translate="quantity">Quantity</th>
+                <th data-translate="user">User</th>
+                <th data-translate="notes">Notes</th>
+              </tr>
+            </thead>
+            <tbody id="historyTableBody">
+              <!-- History items will be inserted here by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
 
+    <!-- ─── Stock Update Modal ──────────────────────────────────── -->
+    <div id="stockUpdateModal" class="modal-overlay hidden">
+      <div class="modal">
+        <h2 data-translate="updateStock">Update Stock</h2>
+        <form id="updateStockForm" class="modal-form" autocomplete="off">
+          <input type="hidden" id="updateProductId" />
+          <h3 id="updateProductName"></h3>
+          <p><span data-translate="currentStock">Current Stock</span>: <span id="currentStockValue">0</span></p>
+          
+          <div class="stock-update-options">
+            <button type="button" class="stock-action-btn" id="addStockBtn" data-translate="addStock">Add Stock</button>
+            <button type="button" class="stock-action-btn" id="removeStockBtn" data-translate="removeStock">Remove Stock</button>
+            <button type="button" class="stock-action-btn" id="setStockBtn" data-translate="setStockLevel">Set Stock Level</button>
+          </div>
+          
+          <div id="stockQuantityInput" class="hidden">
+            <label><span id="quantityActionLabel" data-translate="enterQuantity">Enter quantity</span>
+              <input type="number" id="stockQuantity" min="0" required />
+            </label>
+          </div>
+          
+          <div class="modal-actions">
+            <button type="submit" class="accent-btn" data-translate="save">Save</button>
+            <button type="button" id="cancelStockUpdate" data-translate="cancel">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    
     <!-- ─── Add-Product Modal ──────────────────────────────────── -->
     <div id="modalOverlay" class="modal-overlay hidden">
       <div class="modal">
-        <h2>Add New Product</h2>
+        <h2 data-translate="addNewProduct">Add New Product</h2>
         <form id="addProductForm" class="modal-form" autocomplete="off">
-          <label>Product Name <input id="productName" required /></label>
-          <label>Price <input id="productPrice" type="number" min="0" step="0.01" required /> (﷼)</label>
-          <label>Barcode <input id="productBarcode" /></label>
-          <label>Category
+          <label><span data-translate="productName">Product Name</span> <input id="productName" required /></label>
+          <label><span data-translate="price">Price</span> <input id="productPrice" type="number" min="0" step="0.01" required /> (﷼)</label>
+          <label><span data-translate="barcode">Barcode</span> <input id="productBarcode" /></label>
+          <label><span data-translate="category">Category</span>
             <select id="productCategory">
-              <option value="all">All</option>
-              <option value="flour">Flour</option>
-              <option value="pulses">Pulses</option>
-              <option value="dry">Fruits</option>
-              <option value="oils">Oil</option>
+              <option value="all" data-translate="all">All</option>
+              <option value="flour" data-translate="flour">Flour</option>
+              <option value="pulses" data-translate="pulses">Pulses</option>
+              <option value="dry" data-translate="fruits">Fruits</option>
+              <option value="oils" data-translate="oil">Oil</option>
             </select>
           </label>
-          <label>Image (optional) <input id="productImage" type="file" accept="image/*" /></label>
+          <label><span data-translate="image">Image (optional)</span> <input id="productImage" type="file" accept="image/*" /></label>
           <div class="modal-actions">
-            <button type="submit" class="accent-btn">Add</button>
-            <button type="button" id="cancelModal">Cancel</button>
+            <button type="submit" class="accent-btn" data-translate="add">Add</button>
+            <button type="button" id="cancelModal" data-translate="cancel">Cancel</button>
           </div>
         </form>
       </div>
@@ -75,31 +216,206 @@
     <!-- ─── Checkout Modal ─────────────────────────────────────── -->
     <div id="paymentOverlay" class="modal-overlay hidden">
       <div class="modal payment-modal">
-        <h2>Choose Payment Method</h2>
+        <h2 data-translate="choosePayment">Choose Payment Method</h2>
 
         <div id="paymentOptions" class="pay-options">
-          <button id="payCard" class="accent-btn">Credit Card</button>
-          <button id="payCash" class="accent-btn">Cash</button>
+          <button id="payCard" class="accent-btn" data-translate="creditCard">Credit Card</button>
+          <button id="payCash" class="accent-btn" data-translate="cash">Cash</button>
         </div>
 
         <div id="paymentProcessing" class="hidden center-text">
-          <p>Processing payment...</p>
+          <p data-translate="processingPayment">Processing payment...</p>
         </div>
 
         <div id="cashForm" class="hidden">
           <label style="width:100%">
-            Cash received <input id="cashReceived" type="number" min="0" step="0.01" style="width:100%" /> (﷼)
+            <span data-translate="cashReceived">Cash received</span> <input id="cashReceived" type="number" min="0" step="0.01" style="width:100%" /> (﷼)
           </label>
-          <button id="calcChange" class="accent-btn" style="margin-top:0.5rem">Confirm</button>
+          <button id="calcChange" class="accent-btn" style="margin-top:0.5rem" data-translate="confirm">Confirm</button>
         </div>
 
         <div id="paymentResult" class="hidden center-text">
           <p id="paymentMessage"></p>
-          <button id="donePayment" class="accent-btn">Done</button>
+          <button id="donePayment" class="accent-btn" data-translate="done">Done</button>
         </div>
       </div>
     </div>
 
     <script src="script.js"></script>
+    <script src="stock.js"></script>
+    <script src="language.js"></script>
+    <script>
+      // Initialize stock page if that's the current page
+      window.onload = function() {
+        // Create sample data if none exists
+        if (!localStorage.getItem('products') || JSON.parse(localStorage.getItem('products')).length === 0) {
+          console.log('Creating sample product data');
+          const sampleProducts = [
+            { id: 1, name: "Coffee", price: 5.00, category: "drinks", barcode: "123456", image: "https://via.placeholder.com/150?text=Coffee", stock: 20, lowStockThreshold: 5 },
+            { id: 2, name: "Tea", price: 3.00, category: "drinks", barcode: "234567", image: "https://via.placeholder.com/150?text=Tea", stock: 15, lowStockThreshold: 5 },
+            { id: 3, name: "Sandwich", price: 8.00, category: "food", barcode: "345678", image: "https://via.placeholder.com/150?text=Sandwich", stock: 8, lowStockThreshold: 3 },
+            { id: 4, name: "Cake", price: 6.00, category: "food", barcode: "456789", image: "https://via.placeholder.com/150?text=Cake", stock: 12, lowStockThreshold: 4 },
+            { id: 5, name: "Chips", price: 2.00, category: "snacks", barcode: "567890", image: "https://via.placeholder.com/150?text=Chips", stock: 25, lowStockThreshold: 8 },
+            { id: 6, name: "Chocolate", price: 2.50, category: "snacks", barcode: "678901", image: "https://via.placeholder.com/150?text=Chocolate", stock: 0, lowStockThreshold: 5 }
+          ];
+          localStorage.setItem('products', JSON.stringify(sampleProducts));
+          window.products = sampleProducts;
+        }
+        
+        if (!localStorage.getItem('stockHistory') || JSON.parse(localStorage.getItem('stockHistory')).length === 0) {
+          console.log('Creating sample stock history');
+          const sampleHistory = [
+            { productId: 1, date: "2025-06-28", action: "Stock added", quantity: 20, user: "Admin", notes: "Initial stock" },
+            { productId: 2, date: "2025-06-28", action: "Stock added", quantity: 15, user: "Admin", notes: "Initial stock" },
+            { productId: 3, date: "2025-06-28", action: "Stock added", quantity: 10, user: "Admin", notes: "Initial stock" },
+            { productId: 3, date: "2025-06-29", action: "Stock removed", quantity: -2, user: "Cashier", notes: "Sale" },
+            { productId: 6, date: "2025-06-28", action: "Stock added", quantity: 5, user: "Admin", notes: "Initial stock" },
+            { productId: 6, date: "2025-06-29", action: "Stock removed", quantity: -5, user: "Cashier", notes: "Sale" }
+          ];
+          localStorage.setItem('stockHistory', JSON.stringify(sampleHistory));
+          window.stockHistory = sampleHistory;
+        }
+        
+        // Add a small delay to ensure all scripts are loaded
+        setTimeout(function() {
+          if (document.getElementById('stockManagementBtn').classList.contains('active')) {
+            console.log('Auto-initializing stock page on load');
+            // Direct rendering of stock table
+            const stockTableBody = document.getElementById('stockTableBody');
+            const historyTableBody = document.getElementById('historyTableBody');
+            
+            if (stockTableBody) {
+              stockTableBody.innerHTML = '';
+              const products = window.products || JSON.parse(localStorage.getItem('products')) || [];
+              
+              products.forEach(product => {
+                const row = document.createElement('tr');
+                const stockStatus = product.stock === 0 ? 'outOfStock' : 
+                                   (product.stock <= product.lowStockThreshold ? 'lowStock' : '');
+                row.className = stockStatus;
+                
+                row.innerHTML = `
+                  <td>${product.id}</td>
+                  <td><img src="${product.image || 'https://via.placeholder.com/150?text=No+Image'}" alt="${product.name}" class="stock-product-image" style="width:40px;height:40px;object-fit:cover;"></td>
+                  <td>${product.name}</td>
+                  <td><span class="stock-value ${stockStatus}">${product.stock}</span></td>
+                  <td>${product.lowStockThreshold}</td>
+                  <td>
+                    <button class="quick-add-btn" data-id="${product.id}" style="background:#1fa75c;color:white;border:none;border-radius:4px;padding:4px 8px;margin-right:5px;">+1</button>
+                    <button class="update-stock-btn" data-id="${product.id}" style="background:#333;color:white;border:none;border-radius:4px;padding:4px 8px;">Update Stock</button>
+                  </td>
+                `;
+                
+                stockTableBody.appendChild(row);
+              });
+            }
+            
+            if (historyTableBody) {
+              historyTableBody.innerHTML = '';
+              const stockHistory = window.stockHistory || JSON.parse(localStorage.getItem('stockHistory')) || [];
+              const products = window.products || JSON.parse(localStorage.getItem('products')) || [];
+              
+              stockHistory.sort((a, b) => new Date(b.date) - new Date(a.date))
+                .forEach(entry => {
+                  const product = products.find(p => p.id === entry.productId);
+                  if (!product) return;
+                  
+                  const row = document.createElement('tr');
+                  row.innerHTML = `
+                    <td>${entry.date}</td>
+                    <td>${product.name}</td>
+                    <td>${entry.action}</td>
+                    <td>${entry.quantity > 0 ? '+' + entry.quantity : entry.quantity}</td>
+                    <td>${entry.user}</td>
+                    <td>${entry.notes}</td>
+                  `;
+                  
+                  historyTableBody.appendChild(row);
+                });
+            }
+            
+            // Update statistics
+            const products = window.products || JSON.parse(localStorage.getItem('products')) || [];
+            const statsContainer = document.querySelector('.stock-stats') || document.createElement('div');
+            statsContainer.className = 'stock-stats';
+            statsContainer.style.display = 'flex';
+            statsContainer.style.flexWrap = 'wrap';
+            statsContainer.style.gap = '1rem';
+            statsContainer.style.marginBottom = '1.5rem';
+            
+            const totalProducts = products.length;
+            const totalStock = products.reduce((sum, product) => sum + product.stock, 0);
+            const lowStockProducts = products.filter(p => p.stock > 0 && p.stock <= p.lowStockThreshold).length;
+            const outOfStockProducts = products.filter(p => p.stock === 0).length;
+            
+            statsContainer.innerHTML = `
+              <div class="stat-card" style="background:white;border-radius:8px;box-shadow:0 2px 4px rgba(0,0,0,0.1);padding:1rem;display:flex;align-items:center;min-width:200px;flex:1;">
+                <div class="stat-icon" style="font-size:2rem;margin-right:1rem;">📦</div>
+                <div class="stat-content" style="display:flex;flex-direction:column;">
+                  <div class="stat-value" style="font-size:1.5rem;font-weight:bold;">${totalProducts}</div>
+                  <div class="stat-label" style="color:#6b7280;font-size:0.875rem;">Total Products</div>
+                </div>
+              </div>
+              <div class="stat-card" style="background:white;border-radius:8px;box-shadow:0 2px 4px rgba(0,0,0,0.1);padding:1rem;display:flex;align-items:center;min-width:200px;flex:1;">
+                <div class="stat-icon" style="font-size:2rem;margin-right:1rem;">🔢</div>
+                <div class="stat-content" style="display:flex;flex-direction:column;">
+                  <div class="stat-value" style="font-size:1.5rem;font-weight:bold;">${totalStock}</div>
+                  <div class="stat-label" style="color:#6b7280;font-size:0.875rem;">Total Stock</div>
+                </div>
+              </div>
+              <div class="stat-card ${lowStockProducts > 0 ? 'warning' : ''}" style="background:white;border-radius:8px;box-shadow:0 2px 4px rgba(0,0,0,0.1);padding:1rem;display:flex;align-items:center;min-width:200px;flex:1;${lowStockProducts > 0 ? 'border-left:4px solid #f59e0b;' : ''}">
+                <div class="stat-icon" style="font-size:2rem;margin-right:1rem;">⚠️</div>
+                <div class="stat-content" style="display:flex;flex-direction:column;">
+                  <div class="stat-value" style="font-size:1.5rem;font-weight:bold;">${lowStockProducts}</div>
+                  <div class="stat-label" style="color:#6b7280;font-size:0.875rem;">Low Stock</div>
+                </div>
+              </div>
+              <div class="stat-card ${outOfStockProducts > 0 ? 'danger' : ''}" style="background:white;border-radius:8px;box-shadow:0 2px 4px rgba(0,0,0,0.1);padding:1rem;display:flex;align-items:center;min-width:200px;flex:1;${outOfStockProducts > 0 ? 'border-left:4px solid #ef4444;' : ''}">
+                <div class="stat-icon" style="font-size:2rem;margin-right:1rem;">❗</div>
+                <div class="stat-content" style="display:flex;flex-direction:column;">
+                  <div class="stat-value" style="font-size:1.5rem;font-weight:bold;">${outOfStockProducts}</div>
+                  <div class="stat-label" style="color:#6b7280;font-size:0.875rem;">Out of Stock</div>
+                </div>
+              </div>
+            `;
+            
+            const stockHeader = document.querySelector('.stock-header');
+            if (stockHeader && !document.querySelector('.stock-stats')) {
+              stockHeader.after(statsContainer);
+            }
+            
+            // Add event listeners to buttons
+            document.querySelectorAll('.quick-add-btn').forEach(btn => {
+              btn.addEventListener('click', function() {
+                const productId = parseInt(this.dataset.id);
+                const products = JSON.parse(localStorage.getItem('products')) || [];
+                const product = products.find(p => p.id === productId);
+                if (product) {
+                  product.stock += 1;
+                  localStorage.setItem('products', JSON.stringify(products));
+                  window.products = products;
+                  
+                  // Add to history
+                  const stockHistory = JSON.parse(localStorage.getItem('stockHistory')) || [];
+                  stockHistory.push({
+                    productId,
+                    date: new Date().toISOString().split('T')[0],
+                    action: "Quick add",
+                    quantity: 1,
+                    user: "Admin",
+                    notes: "Quick add +1"
+                  });
+                  localStorage.setItem('stockHistory', JSON.stringify(stockHistory));
+                  window.stockHistory = stockHistory;
+                  
+                  alert('Stock updated!');
+                  location.reload();
+                }
+              });
+            });
+          }
+        }, 300);
+      };
+    </script>
   </body>
 </html>
