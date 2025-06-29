@@ -1,0 +1,105 @@
+<!-- ===== index.html ===== -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MHKZON POS</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- ─── Top-bar ─────────────────────────────────────────────── -->
+    <header class="topbar">
+      <img src="logo.png" alt="MHKZON Logo" class="logo" />
+      <div class="actions">
+        <input id="search" placeholder="Search products..." />
+        <button id="searchBtn" aria-label="search">🔍</button>
+        <button id="addProductBtn" class="accent-btn" aria-label="add product">
+          ➕ Add Product
+        </button>
+      </div>
+    </header>
+
+    <!-- ─── Categories nav ─────────────────────────────────────── -->
+    <nav class="categories" id="categoryNav">
+      <button class="category active" data-cat="all">All</button>
+      <button class="category" data-cat="flour">Flour</button>
+      <button class="category" data-cat="pulses">Pulses</button>
+      <button class="category" data-cat="dry">Fruits</button>
+      <button class="category" data-cat="oils">Oil</button>
+    </nav>
+
+    <!-- ─── Main layout ────────────────────────────────────────── -->
+    <main class="layout">
+      <section class="products" id="product-grid"></section>
+
+      <aside class="cart">
+        <h2>Cart</h2>
+        <ul id="cart-items"></ul>
+        <div class="summary">
+          <p id="item-count">Total Items: 0</p>
+          <p id="qty-count">Total Quantity: 0</p>
+          <button id="checkoutBtn">
+            Checkout <span id="total-price">0.00 ﷼</span>
+          </button>
+        </div>
+      </aside>
+    </main>
+
+    <!-- ─── Add-Product Modal ──────────────────────────────────── -->
+    <div id="modalOverlay" class="modal-overlay hidden">
+      <div class="modal">
+        <h2>Add New Product</h2>
+        <form id="addProductForm" class="modal-form" autocomplete="off">
+          <label>Product Name <input id="productName" required /></label>
+          <label>Price <input id="productPrice" type="number" min="0" step="0.01" required /> (﷼)</label>
+          <label>Barcode <input id="productBarcode" /></label>
+          <label>Category
+            <select id="productCategory">
+              <option value="all">All</option>
+              <option value="flour">Flour</option>
+              <option value="pulses">Pulses</option>
+              <option value="dry">Fruits</option>
+              <option value="oils">Oil</option>
+            </select>
+          </label>
+          <label>Image (optional) <input id="productImage" type="file" accept="image/*" /></label>
+          <div class="modal-actions">
+            <button type="submit" class="accent-btn">Add</button>
+            <button type="button" id="cancelModal">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ─── Checkout Modal ─────────────────────────────────────── -->
+    <div id="paymentOverlay" class="modal-overlay hidden">
+      <div class="modal payment-modal">
+        <h2>Choose Payment Method</h2>
+
+        <div id="paymentOptions" class="pay-options">
+          <button id="payCard" class="accent-btn">Credit Card</button>
+          <button id="payCash" class="accent-btn">Cash</button>
+        </div>
+
+        <div id="paymentProcessing" class="hidden center-text">
+          <p>Processing payment...</p>
+        </div>
+
+        <div id="cashForm" class="hidden">
+          <label style="width:100%">
+            Cash received <input id="cashReceived" type="number" min="0" step="0.01" style="width:100%" /> (﷼)
+          </label>
+          <button id="calcChange" class="accent-btn" style="margin-top:0.5rem">Confirm</button>
+        </div>
+
+        <div id="paymentResult" class="hidden center-text">
+          <p id="paymentMessage"></p>
+          <button id="donePayment" class="accent-btn">Done</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
